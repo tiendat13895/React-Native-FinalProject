@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -69,6 +70,48 @@ export function ProductDetailScreen({navigation, route}: any) {
       cartData.push(cartItems);
     }
     await AsyncStorage.setItem('cartData', JSON.stringify(cartData));
+    Alert.alert('Đã thêm vào giỏ hàng');
+  };
+
+  const doOpenPayment = () => {
+    let cartData: any = [];
+    let cartItems = {
+      id: '',
+      productCode: '',
+      productName: '',
+      patternName: '',
+      rangeName: '',
+      unitName: '',
+      length: 0,
+      width: 0,
+      height: 0,
+      weight: 0,
+      capacity: 0,
+      unitPrice: 0,
+      categoryName: '',
+      quantity: 0,
+    };
+
+    cartItems.id = route.params.id;
+    cartItems.productCode = route.params.productCode;
+    cartItems.productName = route.params.productName;
+    cartItems.patternName = route.params.patternName;
+    cartItems.rangeName = route.params.rangeName;
+    cartItems.unitName = route.params.unitName;
+    cartItems.length = route.params.length;
+    cartItems.width = route.params.width;
+    cartItems.height = route.params.height;
+    cartItems.weight = route.params.weight;
+    cartItems.capacity = route.params.capacity;
+    cartItems.unitPrice = route.params.unitPrice;
+    cartItems.categoryName = route.params.categoryName;
+    cartItems.quantity = 1;
+
+    cartData.push(cartItems);
+    navigation.navigate('Payment', {
+      paymentList: cartData,
+      mode: 'Detail',
+    });
   };
 
   return (
@@ -109,7 +152,7 @@ export function ProductDetailScreen({navigation, route}: any) {
         </View>
         <View style={styles.rootItem}>
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: '#DCDCDC', width: 50}}
+            style={{...styles.button, backgroundColor: '#DCDCDC', width: 70}}
             onPress={() => doAddToCart()}>
             <Image
               source={{
@@ -121,9 +164,14 @@ export function ProductDetailScreen({navigation, route}: any) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={{...styles.button, backgroundColor: '#B22222', width: 150}}
-            onPress={() => navigation.navigate('Home')}>
-            <Text>Thanh toán</Text>
+            style={{...styles.button, backgroundColor: '#FF3366', width: 150}}
+            onPress={() => doOpenPayment()}>
+            <Text
+              style={{
+                color: 'white',
+              }}>
+              Thanh toán
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -149,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 40,
-    marginHorizontal: 5,
+    marginHorizontal: 20,
   },
   itemTitleText: {
     fontSize: 20,

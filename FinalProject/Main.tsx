@@ -15,6 +15,7 @@ import {ForgotPasswordScreen} from './ForgotPassword/ForgotPassword';
 import {ProductScreen} from './Product/Product';
 import {ProductDetailScreen} from './Product/ProductDetail';
 import {CartScreen} from './Product/Cart';
+import {PaymentScreen} from './Product/Payment';
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -117,6 +118,11 @@ export function FinalProject() {
           name="Cart"
           component={CartScreen}
           options={{title: 'Giỏ hàng'}}
+        />
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{title: 'Thanh toán'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

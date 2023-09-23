@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import CheckBox from '@react-native-community/checkbox';
-import axios from 'axios';
 
 export function CartScreen({navigation}: any) {
   const [cartData, setCartData] = useState<any[]>([]);
@@ -33,19 +32,19 @@ export function CartScreen({navigation}: any) {
       }
       if (data) {
         setCartData(JSON.parse(data));
-        calPayment();
+        calPayment(JSON.parse(data));
       }
     });
   };
 
-  const calPayment = () => {
-    if (cartData != undefined) {
+  const calPayment = async (data: any) => {
+    if (data != undefined) {
       let sumAmount = 0;
-      for (let item of cartData) {
+      for (let item of data) {
         sumAmount += item.quantity * item.unitPrice;
       }
       setPaymentAmount(sumAmount);
-      setPaymentQuantity(cartData.length);
+      setPaymentQuantity(data.length);
     }
   };
 
@@ -54,31 +53,33 @@ export function CartScreen({navigation}: any) {
       (item, index) => item.id !== removeItem.id,
     );
     setCartData(cartRemoved);
-    calPayment();
+    calPayment(cartRemoved);
     await AsyncStorage.setItem('cartData', JSON.stringify(cartRemoved));
   };
 
   const doMinusCartItem = async (minusItem: any) => {
     if (minusItem.quantity > 1) {
-      const cartMinus = cartData?.filter(
-        (item, index) => item.id !== minusItem.id,
-      );
-      minusItem.quantity -= 1;
-      cartMinus.push(minusItem);
-
+      const cartMinus = cartData;
+      for (let item of cartMinus) {
+        if (item.id == minusItem.id) {
+          item.quantity -= 1;
+        }
+      }
       setCartData(cartMinus);
-      calPayment();
+      calPayment(cartMinus);
       await AsyncStorage.setItem('cartData', JSON.stringify(cartMinus));
     }
   };
 
   const doPlusCartItem = async (plusItem: any) => {
-    const cartPlus = cartData?.filter((item, index) => item.id !== plusItem.id);
-    plusItem.quantity += 1;
-    cartPlus.push(plusItem);
-
+    const cartPlus = cartData;
+    for (let item of cartPlus) {
+      if (item.id == plusItem.id) {
+        item.quantity += 1;
+      }
+    }
     setCartData(cartPlus);
-    calPayment();
+    calPayment(cartPlus);
     await AsyncStorage.setItem('cartData', JSON.stringify(cartPlus));
   };
 
@@ -94,7 +95,7 @@ export function CartScreen({navigation}: any) {
       <View>
         <View style={styles.container}>
           <FlatList
-            style={{marginBottom: 225}}
+            style={{height: 670}}
             contentInset={{top: 0, bottom: 80, left: 0, right: 0}}
             contentInsetAdjustmentBehavior="automatic"
             data={cartData}
@@ -145,9 +146,7 @@ export function CartScreen({navigation}: any) {
                           onPress={() => doMinusCartItem(item)}>
                           <Text>-</Text>
                         </TouchableOpacity>
-                        <Text style={{}} numberOfLines={1}>
-                          {item.quantity}
-                        </Text>
+                        <Text numberOfLines={1}>{item.quantity}</Text>
                         <TouchableOpacity
                           style={{
                             ...styles.button,
@@ -195,16 +194,26 @@ export function CartScreen({navigation}: any) {
             refreshing={refreshing}
           />
 
-          <View style={{...styles.rootItem, width: '100%'}}>
-            <Text style={{...styles.title, marginRight: 70}}>
+          <View
+            style={{...styles.rootItem, width: '100%', alignItems: 'center'}}>
+            <Text style={{...styles.sumAmount}}>
               {paymentAmount.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })}
+              đ
             </Text>
             <TouchableOpacity
-              style={{...styles.button, backgroundColor: '#B22222', width: 150}}
-              onPress={() => navigation.navigate('Home')}>
-              <Text>
+              style={{...styles.button, backgroundColor: '#FF3366', width: 150}}
+              onPress={() =>
+                navigation.navigate('Payment', {
+                  paymentList: cartData,
+                  mode: 'Cart',
+                })
+              }>
+              <Text
+                style={{
+                  color: 'white',
+                }}>
                 Thanh toán (
                 {paymentQuantity.toLocaleString(undefined, {
                   maximumFractionDigits: 2,
@@ -224,12 +233,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fffff',
     marginTop: 10,
   },
-  title: {
+  sumAmount: {
     fontWeight: 'bold',
-    fontSize: 30,
-    color: '#4169E1',
-    textAlign: 'center',
-    margin: 10,
+    fontSize: 25,
+    color: 'black',
+    marginLeft: 30,
+    marginRight: 10,
   },
 
   rootItem: {

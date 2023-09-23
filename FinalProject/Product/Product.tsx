@@ -10,6 +10,7 @@ import {
   View,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from 'react-native';
 import {Result, RootObject} from './model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -187,6 +188,14 @@ export function ProductScreen({navigation}: any) {
     setCartQuantity(cqty);
   };
 
+  const doOpenCart = () => {
+    if (cartQuantity > 0) {
+      navigation.navigate('Cart');
+    } else {
+      Alert.alert('Không có sản phẩm trong giỏ hàng');
+    }
+  };
+
   return (
     <SafeAreaView>
       <StatusBar />
@@ -211,7 +220,7 @@ export function ProductScreen({navigation}: any) {
                 width: 100,
                 margin: 10,
               }}
-              onPress={() => navigation.navigate('Cart')}>
+              onPress={() => doOpenCart()}>
               <Image
                 source={{
                   uri: 'https://pluspng.com/img-png/cart-png-hd-png-image-256.png',
