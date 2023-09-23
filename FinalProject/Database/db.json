@@ -1,0 +1,13 @@
+{
+    "user": [
+      { 
+        "username": "admin", 
+        "password": "123" ,
+        "name": "Nguyễn Tiến Đạt",
+        "birthday": "13/08/1995",
+        "address": "Binh Duong",
+        "email": "tiendat@gmail.com",
+        "phone": "0778747478"
+      }
+    ]
+}
