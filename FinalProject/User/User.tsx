@@ -10,6 +10,7 @@ import {
   Keyboard,
   Alert,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -241,7 +242,15 @@ export function UserScreen({navigation}: any) {
       <View style={{flex: 1, alignItems: 'center'}}>
         {loadingState && <ActivityIndicator size="large" color="#D97B29" />}
         <Text style={styles.title}>Thông tin tài khoản</Text>
-
+        <View>
+          <Image
+            source={{
+              uri: 'https://pluspng.com/img-png/user-png-icon-young-user-icon-2400.png',
+            }}
+            style={{width: 100, height: 100, margin: 20}}
+            resizeMode="stretch"
+          />
+        </View>
         <TextInput
           onChangeText={text => {
             setErrorName(!text ? 'Hãy nhập họ tên' : '');
@@ -304,6 +313,7 @@ export function UserScreen({navigation}: any) {
         <Text style={styles.error}>{errorPhone}</Text>
 
         <Button title={EditButtonName} onPress={() => doEditUser()} />
+
         {showCancel && (
           <View style={{margin: 10}}>
             <Button title="Hủy" onPress={() => cancelEditUser()} />
@@ -318,7 +328,7 @@ export function UserScreen({navigation}: any) {
         </View>
 
         <TouchableOpacity
-          style={[styles.button, {backgroundColor: 'lightcoral'}]}
+          style={[styles.button, {backgroundColor: 'silver'}]}
           onPress={() => doLogOut()}>
           <Text>Đăng xuất</Text>
         </TouchableOpacity>
@@ -338,9 +348,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    color: 'brown',
-    fontSize: 30,
+    color: '#6495ED',
+    fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 10,
   },
   input: {
     borderWidth: 1,

@@ -24,7 +24,6 @@ export function PaymentScreen({navigation, route}: any) {
   const [address, setAddress] = useState('');
 
   useEffect(() => {
-    console.log(route.params.paymentList);
     setPaymentData(route.params.paymentList);
     calPayment(route.params.paymentList);
 
