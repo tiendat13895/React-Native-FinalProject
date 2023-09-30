@@ -8,6 +8,7 @@ import {
   Alert,
   Keyboard,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +21,7 @@ export function ChangePasswordScreen({navigation}: any) {
   const [errorNewPassword, setErrorNewPassword] = useState('');
   const [errorNewPasswordConfirm, setErrorNewPasswordConfirm] = useState('');
   const [loadingState, setLoadingState] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setOldPassword('');
@@ -132,46 +134,106 @@ export function ChangePasswordScreen({navigation}: any) {
     setLoadingState(false);
   };
 
+  const doShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {loadingState && <ActivityIndicator size="large" color="#D97B29" />}
 
       <Text style={styles.title}> Mật khẩu cũ (*) </Text>
-      <TextInput
-        secureTextEntry={true}
-        onChangeText={text => {
-          setErrorOldPassword(!text ? 'Hãy nhập mật khẩu cũ' : '');
-          setOldPassword(text);
-        }}
-        value={oldPassword}
-        style={styles.input}
-        placeholder="Nhập mật khẩu cũ"
-        placeholderTextColor="grey"></TextInput>
+      <View style={{flexDirection: 'row', marginVertical: 5}}>
+        <TextInput
+          secureTextEntry={!showPassword}
+          onChangeText={text => {
+            setErrorOldPassword(!text ? 'Hãy nhập mật khẩu cũ' : '');
+            setOldPassword(text);
+          }}
+          value={oldPassword}
+          style={styles.input}
+          placeholder="Nhập mật khẩu cũ"
+          placeholderTextColor="grey"></TextInput>
+        <TouchableOpacity
+          style={{
+            width: '10%',
+            paddingTop: 10,
+          }}
+          onPress={() => doShowPassword()}>
+          <Image
+            source={{
+              uri: !showPassword
+                ? 'https://icon-library.com/images/show-hide-icon/show-hide-icon-13.jpg'
+                : 'https://icon-library.com/images/show-hide-icon/show-hide-icon-28.jpg',
+            }}
+            style={{width: 30, height: 30}}
+            resizeMode="stretch"
+          />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.error}>{errorOldPassword}</Text>
 
       <Text style={styles.title}> Mật khẩu mới (*) </Text>
-      <TextInput
-        secureTextEntry={true}
-        onChangeText={text => {
-          setErrorNewPassword(!text ? 'Hãy nhập mật khẩu mới' : '');
-          setNewPassword(text);
-        }}
-        value={newPassword}
-        style={styles.input}
-        placeholder="Nhập mật khẩu mới"
-        placeholderTextColor="grey"></TextInput>
+      <View style={{flexDirection: 'row', marginVertical: 5}}>
+        <TextInput
+          secureTextEntry={!showPassword}
+          onChangeText={text => {
+            setErrorNewPassword(!text ? 'Hãy nhập mật khẩu mới' : '');
+            setNewPassword(text);
+          }}
+          value={newPassword}
+          style={styles.input}
+          placeholder="Nhập mật khẩu mới"
+          placeholderTextColor="grey"></TextInput>
+        <TouchableOpacity
+          style={{
+            width: '10%',
+            paddingTop: 10,
+          }}
+          onPress={() => doShowPassword()}>
+          <Image
+            source={{
+              uri: !showPassword
+                ? 'https://icon-library.com/images/show-hide-icon/show-hide-icon-13.jpg'
+                : 'https://icon-library.com/images/show-hide-icon/show-hide-icon-28.jpg',
+            }}
+            style={{width: 30, height: 30}}
+            resizeMode="stretch"
+          />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.error}>{errorNewPassword}</Text>
 
-      <TextInput
-        secureTextEntry={true}
-        onChangeText={text => {
-          setErrorNewPasswordConfirm(!text ? 'Hãy nhập lại mật khẩu mới' : '');
-          setNewPasswordConfirm(text);
-        }}
-        value={newPasswordConfirm}
-        style={styles.input}
-        placeholder="Nhập lại mật khẩu mới"
-        placeholderTextColor="grey"></TextInput>
+      <View style={{flexDirection: 'row', marginVertical: 5}}>
+        <TextInput
+          secureTextEntry={!showPassword}
+          onChangeText={text => {
+            setErrorNewPasswordConfirm(
+              !text ? 'Hãy nhập lại mật khẩu mới' : '',
+            );
+            setNewPasswordConfirm(text);
+          }}
+          value={newPasswordConfirm}
+          style={styles.input}
+          placeholder="Nhập lại mật khẩu mới"
+          placeholderTextColor="grey"></TextInput>
+        <TouchableOpacity
+          style={{
+            width: '10%',
+            paddingTop: 10,
+          }}
+          onPress={() => doShowPassword()}>
+          <Image
+            source={{
+              uri: !showPassword
+                ? 'https://icon-library.com/images/show-hide-icon/show-hide-icon-13.jpg'
+                : 'https://icon-library.com/images/show-hide-icon/show-hide-icon-28.jpg',
+            }}
+            style={{width: 30, height: 30}}
+            resizeMode="stretch"
+          />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.error}>{errorNewPasswordConfirm}</Text>
 
       <TouchableOpacity
@@ -206,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     margin: 2,
-    width: '95%',
+    width: '80%',
   },
   error: {
     color: 'red',

@@ -9,6 +9,7 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 
@@ -30,6 +31,7 @@ export function CreateUserScreen({navigation}: any) {
   const [errorPhone, setErrorPhone] = useState('');
   const [errorPasswordConfirm, setErrorPasswordConfirm] = useState('');
   const [loadingState, setLoadingState] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     setUserName('');
@@ -178,6 +180,10 @@ export function CreateUserScreen({navigation}: any) {
     }
   };
 
+  const doShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <ScrollView>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -194,16 +200,34 @@ export function CreateUserScreen({navigation}: any) {
           placeholderTextColor="grey"></TextInput>
         <Text style={styles.error}>{errorUserName}</Text>
 
-        <TextInput
-          secureTextEntry={true}
-          onChangeText={text => {
-            setErrorPassWord(!text ? 'Hãy nhập mật khẩu' : '');
-            setPassWord(text);
-          }}
-          value={password}
-          style={styles.input}
-          placeholder="Mật khẩu"
-          placeholderTextColor="grey"></TextInput>
+        <View style={{flexDirection: 'row', marginVertical: 5}}>
+          <TextInput
+            secureTextEntry={!showPassword}
+            onChangeText={text => {
+              setErrorPassWord(!text ? 'Hãy nhập mật khẩu' : '');
+              setPassWord(text);
+            }}
+            value={password}
+            style={{...styles.input, width: '80%'}}
+            placeholder="Mật khẩu"
+            placeholderTextColor="grey"></TextInput>
+          <TouchableOpacity
+            style={{
+              width: '10%',
+              paddingTop: 10,
+            }}
+            onPress={() => doShowPassword()}>
+            <Image
+              source={{
+                uri: !showPassword
+                  ? 'https://icon-library.com/images/show-hide-icon/show-hide-icon-13.jpg'
+                  : 'https://icon-library.com/images/show-hide-icon/show-hide-icon-28.jpg',
+              }}
+              style={{width: 30, height: 30}}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.error}>{errorPassWord}</Text>
 
         <TextInput
@@ -310,7 +334,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     margin: 2,
-    width: '95%',
+    width: '90%',
   },
   error: {
     color: 'red',

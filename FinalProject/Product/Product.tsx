@@ -82,20 +82,20 @@ export function ProductScreen({navigation}: any) {
     // AsyncStorage.removeItem('cartData');
 
     getProductFromApi().then(response => setData(response));
-    navigation.addListener('focus', () => {
-      AsyncStorage.getItem('cartData', (err, data) => {
+    navigation.addListener('focus', async () => {
+      await AsyncStorage.getItem('cartData', (err, data) => {
         if (err) {
           console.log('Error getting userLogin from Storage');
           return;
         }
+        let cqty = 0;
         if (data) {
           let cartData = JSON.parse(data);
-          let cqty = 0;
           for (let items of cartData) {
             cqty += items.quantity;
           }
-          setCartQuantity(cqty);
         }
+        setCartQuantity(cqty);
       });
     });
   }, [navigation]);

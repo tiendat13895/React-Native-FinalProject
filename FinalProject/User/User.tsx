@@ -65,6 +65,7 @@ export function UserScreen({navigation}: any) {
                   console.log('Error to remove userLogin');
                   resolve('');
                 } else {
+                  AsyncStorage.removeItem('cartData');
                   navigation.navigate('Login');
                   resolve('');
                 }

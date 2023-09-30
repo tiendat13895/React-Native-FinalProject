@@ -32,6 +32,7 @@ export function HomeTab() {
               source={{
                 uri: 'https://pluspng.com/img-png/home-icon-png-home-house-icon-image-202-512.png',
               }}
+              // source={require('./Images/Home.png')}
               style={{width: 30, height: 30}}
               resizeMode="stretch"
             />

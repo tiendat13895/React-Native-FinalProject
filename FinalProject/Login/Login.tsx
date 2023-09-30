@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Keyboard,
+  Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -16,6 +17,7 @@ import axios from 'axios';
 export function LoginScreen({navigation}: any) {
   const [username, setUserName] = useState('');
   const [password, setPassWord] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [errorUserName, setErrorUserName] = useState('');
   const [errorPassWord, setErrorPassWord] = useState('');
 
@@ -79,6 +81,10 @@ export function LoginScreen({navigation}: any) {
       .catch(err => console.log(err));
   };
 
+  const doShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <View style={styles.container}>
@@ -94,16 +100,35 @@ export function LoginScreen({navigation}: any) {
           placeholderTextColor="grey"></TextInput>
         <Text style={styles.error}>{errorUserName}</Text>
 
-        <TextInput
-          secureTextEntry={true}
-          onChangeText={text => {
-            setErrorPassWord(!text ? 'Hãy nhập mật khẩu!' : '');
-            setPassWord(text);
-          }}
-          value={password}
-          style={styles.input}
-          placeholder="Mật khẩu"
-          placeholderTextColor="grey"></TextInput>
+        <View style={{flexDirection: 'row', marginVertical: 5}}>
+          <TextInput
+            secureTextEntry={!showPassword}
+            onChangeText={text => {
+              setErrorPassWord(!text ? 'Hãy nhập mật khẩu!' : '');
+              setPassWord(text);
+            }}
+            value={password}
+            style={{...styles.input, width: '80%'}}
+            placeholder="Mật khẩu"
+            placeholderTextColor="grey"></TextInput>
+
+          <TouchableOpacity
+            style={{
+              width: '10%',
+              paddingTop: 20
+            }}
+            onPress={() => doShowPassword()}>
+            <Image
+              source={{
+                uri: !showPassword
+                  ? 'https://icon-library.com/images/show-hide-icon/show-hide-icon-13.jpg'
+                  : 'https://icon-library.com/images/show-hide-icon/show-hide-icon-28.jpg',
+              }}
+              style={{width: 30, height: 30}}
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.error}>{errorPassWord}</Text>
 
         <TouchableOpacity
@@ -119,7 +144,7 @@ export function LoginScreen({navigation}: any) {
           onPress={() => navigation.navigate('CreateUser')}>
           <Text>Đăng ký</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[styles.button, {backgroundColor: 'lightblue'}]}
           onPress={() => navigation.navigate('ForgotPassword')}>
